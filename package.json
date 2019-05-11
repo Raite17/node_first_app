@@ -1,0 +1,35 @@
+{
+    "name": "node_first_app",
+    "version": "1.0.0",
+    "description": "",
+    "main": "app.js",
+    "scripts": {
+        "start": "node app.js",
+        "dev": "nodemon app.js"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/Raite17/node_first_app.git"
+    },
+    "author": "Raite",
+    "license": "ISC",
+    "devDependencies": {
+        "eslint": "^5.16.0",
+        "eslint-plugin-node": "^8.0.1",
+        "nodemon": "^1.19.0"
+    },
+    "engines": {
+        "node": ">=9.0.0"
+    },
+    "bugs": {
+        "url": "https://github.com/Raite17/node_first_app/issues"
+    },
+    "homepage": "https://github.com/Raite17/node_first_app#readme",
+    "dependencies": {
+        "cors": "^2.8.5",
+        "errorhandler": "^1.5.1",
+        "express": "^4.16.4",
+        "express-session": "^1.16.1",
+        "mongoose": "^5.5.7"
+    }
+}
