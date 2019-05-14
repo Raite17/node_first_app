@@ -7,6 +7,9 @@ const cors = require('cors');
 const mongoose = require('mongoose');
 const errorHandler = require('errorhandler');
 const config = require('./config');
+const models = require('./models');
+const passport = require('./config/passport');
+const routes = require('./routes');
 
 mongoose.promise = global.Promise;
 
@@ -16,6 +19,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(errorHandler());
+app.use(routes);
 
 //Mongo connection
 mongoose.connection
