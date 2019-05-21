@@ -1,0 +1,35 @@
+<% include partials/header.ejs %>
+<div class="container">
+  <div class="row mt-5">
+    <div class="col-md-6 m-auto">
+      <div class="card card-body">
+        <h1 class="text-center mb-3">
+          <i class="fas fa-user-plus"></i> Регистрация
+        </h1>
+         <% include partials/messages.ejs %>
+        <form action="/register" method="POST">
+          <div class="form-group">
+            <label for="name">Имя</label>
+            <input type="name" id="username" name="username" class="form-control" placeholder="Введите имя" value="<%= typeof username != 'undefined' ? username : '' %>" />
+          </div>
+          <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" class="form-control" placeholder="Введите Email" value="<%= typeof email != 'undefined' ? email : '' %>" />
+          </div>
+          <div class="form-group">
+            <label for="password">Пароль</label>
+            <input type="password" id="password" name="password" class="form-control" placeholder="Пароль" value="<%= typeof password != 'undefined' ? password : '' %>" />
+          </div>
+          <div class="form-group">
+            <label for="password2">Подтвердите пароль</label>
+            <input type="password" id="password_confirm" name="password_confirm" class="form-control" placeholder="Подтвердите пароль" value="<%= typeof password_confirm != 'undefined' ? password_confirm : '' %>" />
+          </div>
+          <button type="submit" class="btn btn-primary btn-block">Регистрация</button>
+        </form>
+        <p class="lead mt-4">Уже есть аккаунт? <a href="/login">Войти</a></p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<% include partials/footer.ejs %>
