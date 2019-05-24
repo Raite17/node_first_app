@@ -1,25 +1,28 @@
 const express = require('express');
-const app = express();
 const path = require('path');
 const bodyParser = require('body-parser');
-const session = require('express-session');
+const expressLayouts = require('express-ejs-layouts');
 const flash = require('connect-flash');
-const mongoose = require('mongoose');
-const errorHandler = require('errorhandler');
-const config = require('./config');
 const routes = require('./routes');
+const mongoose = require('mongoose');
+const config = require('./config');
+const session = require('express-session');
+const MongoStore = require('connect-mongo')(session);
+const passport = require('passport');
+const app = express();
+const passportConfig = require('./config/passport')(passport);
 
 mongoose.promise = global.Promise;
 
 //middleware
+app.use(expressLayouts);
 app.set('view engine', 'ejs');
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, 'public')));
-app.use(errorHandler());
-app.use(routes.auth);
 
-//Mongo connection
+
+//Подключение к Mongo
 mongoose.connection
     .on("error", error => console.log(error))
     .on("close", () => console.log("Database connection closed."))
@@ -30,25 +33,37 @@ mongoose.connection
 
 mongoose.connect(config.MONGO_URL);
 
-//Выдаем 404 ошибку если не найдена страница
-app.use((req, res, next) => {
-    const err = new Error('Not Found');
-    err.status = 404;
-    next(err);
+//Express Сессии
+app.use(
+    session({
+        secret: config.SESSION_SECRET,
+        resave: true,
+        saveUninitialized: true,
+        store: new MongoStore({
+            mongooseConnection: mongoose.connection
+        })
+    })
+);
+
+//passport middleware
+app.use(passport.initialize());
+app.use(passport.session());
+
+// Connect flash
+app.use(flash());
+
+// Global variables
+app.use(function(req, res, next) {
+    res.locals.success_msg = req.flash('success_msg');
+    res.locals.error_msg = req.flash('error_msg');
+    res.locals.error = req.flash('error');
+    next();
 });
 
-//Обрабатываем все возникшие ошибки
-app.use((err, req, res) => {
-    res.status(err.status || 500);
-    res.json({
-        errors: {
-            message: err.message,
-            error: {},
-        },
-    });
-});
+//routes
+app.use(routes.auth);
 
-//Server start
+//Запуск сервера
 app.listen(config.PORT, () => {
     console.log(`Сервер запущен по порту ${config.PORT}`);
 });

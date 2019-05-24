@@ -1,12 +1,10 @@
-<% include partials/header.ejs %>
-<div class="container">
-  <div class="row mt-5">
-    <div class="col-md-6 m-auto">
-      <div class="card card-body">
-        <h1 class="text-center mb-3">
-          <i class="fas fa-user-plus"></i> Регистрация
-        </h1>
-         <% include partials/messages.ejs %>
+<div class="row mt-5">
+  <div class="col-md-6 m-auto">
+    <div class="card card-body">
+      <h1 class="text-center mb-3">
+        <i class="fas fa-user-plus"></i> Регистрация
+      </h1>
+      <% include partials/messages.ejs %>
         <form action="/register" method="POST">
           <div class="form-group">
             <label for="name">Имя</label>
@@ -27,9 +25,6 @@
           <button type="submit" class="btn btn-primary btn-block">Регистрация</button>
         </form>
         <p class="lead mt-4">Уже есть аккаунт? <a href="/login">Войти</a></p>
-      </div>
     </div>
   </div>
 </div>
-
-<% include partials/footer.ejs %>
