@@ -1,7 +1,5 @@
 const express = require('express');
-const path = require('path');
 const bodyParser = require('body-parser');
-const expressLayouts = require('express-ejs-layouts');
 const flash = require('connect-flash');
 const routes = require('./routes');
 const mongoose = require('mongoose');
@@ -15,12 +13,10 @@ const passportConfig = require('./config/passport')(passport);
 mongoose.promise = global.Promise;
 
 //middleware
-app.use(expressLayouts);
 app.set('view engine', 'ejs');
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
-app.use(express.static(path.join(__dirname, 'public')));
-
+app.use("/public", express.static("public"));
 
 //Подключение к Mongo
 mongoose.connection
@@ -53,7 +49,7 @@ app.use(passport.session());
 app.use(flash());
 
 // Global variables
-app.use(function(req, res, next) {
+app.use((req, res, next) => {
     res.locals.success_msg = req.flash('success_msg');
     res.locals.error_msg = req.flash('error_msg');
     res.locals.error = req.flash('error');
@@ -62,6 +58,7 @@ app.use(function(req, res, next) {
 
 //routes
 app.use(routes.auth);
+app.use(routes.posts);
 
 //Запуск сервера
 app.listen(config.PORT, () => {

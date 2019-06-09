@@ -1,5 +1,4 @@
-const Users = require('./Users');
-
+const Post = require('./post');
 module.exports = {
-    Users
+    Post
 };

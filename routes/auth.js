@@ -9,16 +9,16 @@ router.get('/login', (req, res) => res.render('login'));
 router.get('/register', (req, res) => res.render('register'));
 
 
-router.get('/dashboard', ensureAuthenticated, (req, res) =>
+router.get('/dashboard', ensureAuthenticated, (req, res) => {
     res.render('dashboard', {
-        username: req.user.username
+        userName: req.user.username,
+        userId: req.user._id
     })
-);
+});
 
 //Обработчик регистрации
 
 router.post('/register', (req, res) => {
-    console.log(req.body);
     const { username, email, password, password_confirm } = req.body;
     let errors = [];
 
@@ -98,7 +98,7 @@ router.post('/login', (req, res, next) => {
         req.flash('error_msg', 'Пожалуйста заполните все поля!');
     }
     passport.authenticate('local', {
-        successRedirect: '/dashboard',
+        successRedirect: '/posts',
         failureRedirect: '/login',
         failureFlash: false
     })(req, res, next);

@@ -8,19 +8,19 @@
         <form action="/register" method="POST">
           <div class="form-group">
             <label for="name">Имя</label>
-            <input type="name" id="username" name="username" class="form-control" placeholder="Введите имя" value="<%= typeof username != 'undefined' ? username : '' %>" />
+            <input type="name" id="username" name="username" class="form-control" placeholder="Введите имя" value="<%= typeof username != 'undefined' ? username : '' %>" required />
           </div>
           <div class="form-group">
             <label for="email">Email</label>
-            <input type="email" id="email" name="email" class="form-control" placeholder="Введите Email" value="<%= typeof email != 'undefined' ? email : '' %>" />
+            <input type="email" id="email" name="email" class="form-control" placeholder="Введите Email" value="<%= typeof email != 'undefined' ? email : '' %>" required />
           </div>
           <div class="form-group">
             <label for="password">Пароль</label>
-            <input type="password" id="password" name="password" class="form-control" placeholder="Пароль" value="<%= typeof password != 'undefined' ? password : '' %>" />
+            <input type="password" id="password" name="password" class="form-control" placeholder="Пароль" value="<%= typeof password != 'undefined' ? password : '' %>" required />
           </div>
           <div class="form-group">
             <label for="password2">Подтвердите пароль</label>
-            <input type="password" id="password_confirm" name="password_confirm" class="form-control" placeholder="Подтвердите пароль" value="<%= typeof password_confirm != 'undefined' ? password_confirm : '' %>" />
+            <input type="password" id="password_confirm" name="password_confirm" class="form-control" placeholder="Подтвердите пароль" value="<%= typeof password_confirm != 'undefined' ? password_confirm : '' %>" required />
           </div>
           <button type="submit" class="btn btn-primary btn-block">Регистрация</button>
         </form>
