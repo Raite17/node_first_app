@@ -10,15 +10,15 @@ $('.newPost').on('submit', function(e) {
         contentType: "application/json",
         success: function(response) {
             const row = `<tr>
-                        <td scope="row">${response.post.title}</td>
-                        <td scope="row">${response.post.description} </td>
-                        <td scope="row">Img</td>
-                        <td scope="row">
-                            <a id="editPost" class="btn btn-warning float-right"> Изменить  &#9998;</a>
-                            <a id="deletePost" class="btn btn-primary float-right"> Удалить  &#10008;</a>
-                        </td>
-                    </tr>`;
-
+                            <td scope="row">${response.post.title}</td>
+                            <td scope="row">${response.post.description} </td>
+                            <td scope="row">Img</td>
+                            <td scope="row text-center">
+                                <a id="editPost" class="btn btn-info" data-id="${response.post._id}" style="color:white">Изменить</a>
+                                <a id="deletePost"class="btn btn-danger" data-id="${response.post._id}" style="color:white">Удалить</a>
+                            </td>
+                        </tr>`;
+            $('#addModal').modal('toggle');
             if (response.length > 0) {
                 response.forEach(function(error) {
                     $('#statusDiv').addClass('alert-danger').show().text(error.message).hide(5000);
@@ -31,6 +31,22 @@ $('.newPost').on('submit', function(e) {
         },
         error: function(err) {
             console.error(err);
+        }
+    })
+});
+
+$('#deletePost').on('click', function(e) {
+    e.preventDefault();
+    const postId = $(this).data("id");
+    $.ajax({
+        url: '/delete-post/' + postId,
+        type: "DELETE",
+        contentType: "application/json",
+        success: function(response) {
+            if (confirm('Вы действительно хотите удалить запись?')) {
+                $('#statusDiv').addClass('alert-success').show().text(response.message).hide(5000);
+                $('.postData').fadeOut(500);
+            }
         }
     })
 });

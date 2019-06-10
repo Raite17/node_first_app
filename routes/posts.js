@@ -58,4 +58,16 @@ router.post('/create-post', (req, res) => {
             });
     }
 });
+
+router.delete('/delete-post/:id', (req, res) => {
+    const _id = req.params.id;
+    Post.findByIdAndDelete({ _id }).
+    then(post => {
+        res.json({
+                status: true,
+                message: "Запись успешно удалена!"
+            })
+            .catch(err => console.log(err));
+    });
+});
 module.exports = router;

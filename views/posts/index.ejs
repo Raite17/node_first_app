@@ -14,13 +14,13 @@
   </thead>
   <tbody>
      <% posts.forEach((post) => { %>
-       <tr>
+       <tr class="postData">
         <td scope="row"><%= post.title%></td>
         <td scope="row"><%= post.description%> </td>
         <td scope="row">Img</td>
-        <td scope="row">
-            <a id="editPost" class="btn btn-warning float-right"> Изменить  &#9998;</a>
-            <a id="deletePost" class="btn btn-primary float-right"> Удалить  &#10008;</a>
+        <td scope="row text-center">
+            <a id="editPost" class="btn btn-info" data-id="<%= post._id%>" style="color:white">Изменить</a>
+            <a id="deletePost"class="btn btn-danger" data-id="<%= post._id%>" style="color:white">Удалить</a>
         </td>
        </tr>
      <% }); %>
