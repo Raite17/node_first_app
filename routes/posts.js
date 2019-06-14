@@ -15,7 +15,8 @@ router.get('/posts', ensureAuthenticated, (req, res) => {
 });
 
 router.post('/create-post', (req, res) => {
-    const { title, description } = req.body;
+    const { _id, title, description } = req.body;
+    const userId = req.user._id;
     title.trim().replace(/ +(?= )/g, '');
     description.trim();
     let errors = [];
@@ -40,22 +41,41 @@ router.post('/create-post', (req, res) => {
         const newPost = new Post({
             title,
             description,
-            createdBy: req.user._id
+            createdBy: userId
         });
-        newPost.save()
-            .then(post => {
-                res.json({
-                    status: true,
-                    message: "Запись успешно добавлена!",
-                    post
+        if (_id) {
+            Post.findOneAndUpdate({
+                    _id,
+                    createdBy: userId
+                }, {
+                    title,
+                    description,
+                    createdBy: userId
+                }, { new: true })
+                .then(post => {
+                    res.json({
+                        status: true,
+                        message: "Запись успешно редактирована!",
+                        post
+                    })
+                })
+                .catch(err => console.log(err));
+        } else {
+            newPost.save()
+                .then(post => {
+                    res.json({
+                        status: true,
+                        message: "Запись успешно добавлена!",
+                        post
+                    });
+                })
+                .catch(err => {
+                    res.json({
+                        status: false,
+                        message: "Произошла ошибка,попробуйте снова!"
+                    });
                 });
-            })
-            .catch(err => {
-                res.json({
-                    status: false,
-                    message: "Произошла ошибка,попробуйте снова!"
-                });
-            });
+        }
     }
 });
 
@@ -70,4 +90,4 @@ router.delete('/delete-post/:id', (req, res) => {
             .catch(err => console.log(err));
     });
 });
-module.exports = router;
+module.exports = router
