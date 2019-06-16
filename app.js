@@ -14,9 +14,10 @@ mongoose.promise = global.Promise;
 
 //middleware
 app.set('view engine', 'ejs');
+app.use("/uploads", express.static("uploads"));
+app.use("/public", express.static("public"));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
-app.use("/public", express.static("public"));
 
 //Подключение к Mongo
 mongoose.connection

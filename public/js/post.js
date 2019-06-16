@@ -1,13 +1,12 @@
 $('.newPost').on('submit', function(e) {
     e.preventDefault();
-    const title = $('#post-title').val();
-    const description = $("#post-description").val();
-    const data = { title, description };
+    const data = new FormData($(this)[0]);
     $.ajax({
         url: "/create-post",
         type: "POST",
-        data: JSON.stringify(data),
-        contentType: "application/json",
+        data: data,
+        processData: false,
+        contentType: false,
         success: function(response) {
             $('#addModal').modal('toggle');
             if (response.length > 0) {
@@ -54,8 +53,7 @@ $('#editPost').on('click', function(e) {
     const editDescription = $('#edit-description').val(getCurrentDescription);
     const postId = $('#post_id').val(_id);
 
-    $('.modal-title').text('Редактирование поста');
-    $('#editButton').removeClass('btn-success').addClass('btn-primary').val('Изменить');
+
 });
 
 $('.editPost').on('submit', function(e) {

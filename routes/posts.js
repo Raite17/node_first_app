@@ -1,7 +1,56 @@
 const express = require('express');
 const router = express.Router();
+const path = require('path');
 const Post = require('../models/Post');
+const multer = require('multer');
+const config = require('../config');
+const mkdirp = require('mkdirp');
+const Sharp = require('sharp');
+const diskStorage = require('../utils/diskStorage');
 const { ensureAuthenticated } = require('../config/auth');
+
+const randomString = () => Math.random().toString(36).slice(-3);
+
+//fileUpload
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        const dir = '/' + randomString() + '/' + randomString();
+        req.dir = dir;
+        mkdirp(config.DESTINATION + dir, err => cb(err, config.DESTINATION + dir));
+    },
+    filename: (req, file, cb) => {
+        const filename = Date.now().toString(36) + path.extname(file.originalname);
+        const dir = req.dir;
+        cb(null, filename);
+    },
+    sharp: (req, file, cb) => {
+        const resizer =
+            Sharp()
+            .resize(1024, 768)
+            .max()
+            .withoutEnlargement()
+            .toFormat('jpg')
+            .jpeg({
+                quality: 40,
+                progressive: true
+            });
+        cb(null, resizer);
+    }
+});
+
+const upload = multer({
+    storage,
+    limits: { fileSize: 2 * 1024 * 1024 },
+    fileFilter: (req, file, cb) => {
+        const ext = path.extname(file.originalname);
+        if (ext !== '.jpg' && ext !== '.jpeg' && ext !== '.png') {
+            const err = new Error('Extension');
+            err.code = "EXTENSION";
+            return cb(err);
+        }
+        cb(null, true);
+    }
+});
 
 //routes
 router.get('/posts', ensureAuthenticated, (req, res) => {
@@ -14,7 +63,7 @@ router.get('/posts', ensureAuthenticated, (req, res) => {
         });
 });
 
-router.post('/create-post', (req, res) => {
+router.post('/create-post', upload.single('file'), (req, res) => {
     const { _id, title, description } = req.body;
     const userId = req.user._id;
     title.trim().replace(/ +(?= )/g, '');
@@ -34,13 +83,13 @@ router.post('/create-post', (req, res) => {
             message: "Описание должно состоять не менее из 5 символов"
         });
     }
-
     if (errors.length > 0) {
         res.send(errors);
     } else {
         const newPost = new Post({
             title,
             description,
+            img: req.file.path,
             createdBy: userId
         });
         if (_id) {
