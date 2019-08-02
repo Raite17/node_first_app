@@ -6,6 +6,7 @@ const multer = require('multer');
 const config = require('../config');
 const mkdirp = require('mkdirp');
 const Sharp = require('sharp');
+const moment = require('moment');
 const diskStorage = require('../utils/diskStorage');
 const { ensureAuthenticated } = require('../config/auth');
 
@@ -61,6 +62,31 @@ router.get('/posts', ensureAuthenticated, (req, res) => {
         .catch(err => {
             throw new Error(err);
         });
+});
+
+router.get('/posts/:post', (req, res, next) => {
+    const url = req.params.post.trim().replace(/ +(?= )/g, '');
+    if (!url) {
+        const err = new Error('Not Found');
+        err.status = 404;
+        next(err);
+    } else {
+        Post.findOne({
+            url
+        }).then(post => {
+            if (!post) {
+                const err = new Error('Not Found');
+                err.status = 404;
+                next(err);
+            } else {
+                const createdAt = moment(post.createdAt).format('DD-MM-YYYY hh:mm');
+                res.render('posts/post', {
+                    post,
+                    createdAt
+                });
+            }
+        });
+    }
 });
 
 router.post('/create-post', upload.single('file'), (req, res) => {

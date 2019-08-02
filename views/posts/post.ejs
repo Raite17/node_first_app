@@ -1,0 +1,24 @@
+<% include ../partials/header.ejs%>
+<div class="main">
+    <div class="container">
+      <div class="content">
+        <div class="post">
+          <div class="top">
+            <h1><%=post.title %></h1>
+          </div>
+          <div class="bottom">
+            <div class="author">
+              <span>Создано: <%= createdAt%></span>
+            </div>
+          </div>
+          <div class="thumbnail">
+            <img style="width:50%" src="<%= post.img%>">
+          </div>
+          <div class="body">
+            <p><%=post.description %></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+<% include ../partials/footer.ejs %>

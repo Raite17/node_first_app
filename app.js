@@ -1,6 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const flash = require('connect-flash');
+const path = require('path');
 const routes = require('./routes');
 const mongoose = require('mongoose');
 const config = require('./config');
@@ -8,16 +9,18 @@ const session = require('express-session');
 const MongoStore = require('connect-mongo')(session);
 const passport = require('passport');
 const app = express();
+const cors = require('cors');
 const passportConfig = require('./config/passport')(passport);
 
 mongoose.promise = global.Promise;
 
 //middleware
 app.set('view engine', 'ejs');
-app.use("/uploads", express.static("uploads"));
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.use("/public", express.static("public"));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+app.use(cors());
 
 //Подключение к Mongo
 mongoose.connection

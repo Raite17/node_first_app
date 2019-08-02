@@ -14,7 +14,7 @@
   <tbody>
      <% posts.forEach((post) => { %>
        <tr id ="postData">
-        <td scope="row"><%= post.title%></td>
+        <td scope="row"><a href="/posts/<%= post.url%>"><%= post.title%></a></td>
         <td scope="row"><%= post.description%> </td>
         <td scope="row text-center">
             <a id="editPost" class="btn btn-info" data-id="<%= post._id%>" data-title="<%= post.title%>" data-description="<%= post.description%>"  data-toggle="modal" data-target="#editModal" style="color:white">

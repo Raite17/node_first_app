@@ -1,0 +1,42 @@
+.main {
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    -ms-flex-positive: 1;
+    flex-grow: 1
+}
+
+.main .container .content {
+    -ms-flex: 3;
+    flex: 3;
+    margin-right: 15px;
+    margin-bottom: 15px;
+    min-height: 100px
+}
+
+.post {
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    border: 1px solid #e8e8e8;
+    padding: 15px;
+    margin-bottom: 15px;
+    background-color: #fff;
+    border-radius: 2px
+}
+
+.post .top h2 {
+    margin-top: 0
+}
+
+.post .body p {
+    text-align: justify
+}
+
+.post .bottom {
+    font-size: .9em;
+    -ms-flex-pack: justify;
+    justify-content: space-between
+}
